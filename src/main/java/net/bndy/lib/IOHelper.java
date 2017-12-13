@@ -4,12 +4,14 @@
  ******************************************************************************/
 package net.bndy.lib;
 
-import java.awt.AlphaComposite;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import org.apache.commons.io.FileUtils;
+
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -59,5 +61,93 @@ public class IOHelper {
 		} catch (IOException ioe) {
 			throw ioe;
 		}
+	}
+
+	public static boolean isPathExisted(String path) {
+	    return new File(path).exists();
+	}
+
+	public static boolean isFileExisted(String path) {
+	    File f = new File(path);
+	    return f.exists() && f.isFile();
+	}
+
+	public static boolean isDirectoryExisted(String path) {
+		File f = new File(path);
+		return f.exists() && f.isDirectory();
+	}
+
+	public static boolean ensureDirectory(String path) {
+	    return new File(path).mkdirs();
+	}
+
+	public static void copyDirectory(String srcDir, String destDir) throws IOException {
+        FileUtils.copyDirectory(new File(srcDir), new File(destDir));
+	}
+
+	public static void copyFile(String srcFile, String destFile) throws IOException {
+		FileUtils.copyFile(new File(srcFile), new File(destFile));
+	}
+
+	public static void copyFile2Directory(String srcFile, String destDir) throws IOException {
+        FileUtils.copyFileToDirectory(new File(srcFile), new File(destDir));
+	}
+
+	public static File[] getFilesAndDirectories(String path) {
+		return new File(path).listFiles();
+	}
+
+	public static List<File> getFiles(String path) {
+	    List<File> result = new ArrayList<>();
+	    for (File f: new File(path).listFiles()) {
+	    	if (f.isFile()) {
+	    		result.add(f);
+			}
+		}
+		return result;
+	}
+
+	public static List<File> getDirectories(String path) {
+		List<File> result = new ArrayList<>();
+		for (File f: new File(path).listFiles()) {
+			if (f.isDirectory()) {
+				result.add(f);
+			}
+		}
+		return result;
+	}
+
+	public static List<File> getAllFilesAndDirectories(String path) {
+		List<File> result = new ArrayList<>();
+		for (File f: new File(path).listFiles()) {
+			if (f.isFile()) {
+				result.add(f);
+			} else if (f.isDirectory()) {
+				result.addAll(getAllFilesAndDirectories(f.getAbsolutePath()));
+			}
+		}
+		return  result;
+	}
+
+	public static List<File> getAllFiles(String path) {
+	    List<File> result = new ArrayList<>();
+		List<File> allFiles = getAllFilesAndDirectories(path);
+		for(File f: allFiles) {
+			if (f.isFile()) {
+				result.add(f);
+			}
+		}
+		return result;
+	}
+
+	public static List<File> getAllDirectories(String path) {
+		List<File> result = new ArrayList<>();
+		List<File> allFiles = getAllFilesAndDirectories(path);
+		for(File f: allFiles) {
+			if (f.isDirectory()) {
+				result.add(f);
+			}
+		}
+		return result;
 	}
 }

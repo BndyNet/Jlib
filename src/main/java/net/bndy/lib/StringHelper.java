@@ -36,10 +36,14 @@ public class StringHelper {
 	}
 
 	public static String cut(String source, int length) {
+	    return cut(source, length, "");
+	}
+
+	public static String cut(String source, int length, String ellipsis) {
 		if (source.length() <= length) {
 			return source;
 		} else {
-			return source.substring(0, length - 1) + "...";
+			return source.substring(0, length) + (ellipsis == null ? "" : ellipsis);
 		}
 	}
 
