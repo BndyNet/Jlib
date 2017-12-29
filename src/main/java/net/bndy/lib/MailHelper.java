@@ -18,7 +18,7 @@ import javax.mail.internet.MimeMessage;
 public class MailHelper {
 
 	public static void sendMail(String host, int port, String username, String password, String recipients,
-			String subject, String content, String from) throws AddressException, MessagingException {
+			String subject, String content, String from) throws MessagingException {
 		
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
