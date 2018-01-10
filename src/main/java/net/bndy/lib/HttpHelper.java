@@ -4,6 +4,7 @@
  ******************************************************************************/
 package net.bndy.lib;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,14 +21,38 @@ import java.util.Map;
 
 public class HttpHelper {
 
+	/**
+	 * Sends a GET request.
+	 *
+	 * @param url	the request url
+	 * @return		the response
+	 * @throws Exception	any exceptions
+	 */
 	public static String requestGet(String url) throws Exception {
 		return requestGet(url, null, null);
 	}
-	
+
+	/**
+	 * Sends a GET request.
+	 *
+	 * @param url	the request url
+	 * @param connection	an instance of URLConnection
+	 * @return	the response
+	 * @throws Exception	any exceptions
+	 */
 	public static String requestGet(String url, URLConnection connection) throws Exception {
 		return requestGet(url, connection, "utf-8");
 	}
 
+	/**
+	 * Sends a GET request.
+	 *
+	 * @param url	the request url
+	 * @param connection	an instance of URLConnection
+	 * @param charset	the request charset
+	 * @return	the response
+	 * @throws Exception	any exceptions
+	 */
 	public static String requestGet(String url, URLConnection connection, String charset) throws Exception {
 
 		if (connection == null) {
@@ -76,6 +101,14 @@ public class HttpHelper {
 		return resultBuffer.toString();
 	}
 
+	/**
+	 * Sends a Post request.
+	 *
+	 * @param url	the request url
+	 * @param parameterMap	the post data typed Map<?, ?>
+	 * @return	the response
+	 * @throws Exception	any exceptions
+	 */
 	public static String requestPost(String url, Map<?, ?> parameterMap) throws Exception {
 		StringBuffer parameterBuffer = new StringBuffer();
 		if (parameterMap != null) {
@@ -156,10 +189,26 @@ public class HttpHelper {
 		return resultBuffer.toString();
 	}
 
+	/**
+	 * Opens a connection.
+	 *
+	 * @param urlString	the url
+	 * @return	an instance of URLConnection
+	 * @throws IOException	IOException
+	 */
 	public static URLConnection openConnection(String urlString) throws IOException {
 		return openConnection(urlString, null, null);
 	}
-	
+
+	/**
+	 * Opens a connection.
+	 *
+	 * @param urlString	the url
+	 * @param proxyHost	the proxy host
+	 * @param proxyPort	the proxy port
+	 * @return	an instance of URLConnection
+	 * @throws IOException	IOException
+	 */
 	public static URLConnection openConnection(String urlString, String proxyHost, Integer proxyPort) throws IOException {
 		URL url = new URL(urlString);
 		URLConnection connection;
@@ -170,5 +219,15 @@ public class HttpHelper {
 			connection = url.openConnection();
 		}
 		return connection;
+	}
+
+	/**
+	 * Gets root url for website.
+	 *
+	 * @param request	an instance of HttpServletRequest
+	 * @return	the root url
+	 */
+	public static String getRootUrl(HttpServletRequest request) {
+		return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
 	}
 }

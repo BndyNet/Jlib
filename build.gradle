@@ -17,7 +17,7 @@ dependencies {
     compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
     compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.0'
     compile group: 'org.apache.directory.studio', name: 'org.apache.commons.io', version: '2.4'
-
+    compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 }
 
 publishing {

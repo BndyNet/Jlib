@@ -16,6 +16,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * Json Utils
+ */
 public class JsonHelper {
 	
 	private static ObjectMapper objMapper = new ObjectMapper();
@@ -29,21 +32,53 @@ public class JsonHelper {
 		objMapper.setDateFormat(df);
 	}
 
+	/**
+	 * Converts an object to Json string.
+	 *
+	 * @param obj	the object
+	 * @return		the Json string
+	 * @throws JsonProcessingException	JsonProcessingException
+	 */
     public static String toString(Object obj) throws JsonProcessingException {
         return objMapper.writeValueAsString(obj);
     }
-    
-    public static <T> T parse(String json, Class<T> valueType) throws JsonParseException, JsonMappingException, IOException {
+
+	/**
+	 * Parses a Json string to object.
+	 *
+	 * @param json			the json string
+	 * @param valueType		the result type
+	 * @param <T>			the type
+	 * @return				an instance typed T
+	 * @throws IOException			IOException
+	 */
+    public static <T> T parse(String json, Class<T> valueType) throws IOException {
     	return objMapper.readValue(json, valueType);
     }
-    
-    public static void save2File(Object obj, String filepath) throws JsonGenerationException, JsonMappingException, IOException {
+
+	/**
+	 * Converts an object to Json string and saves to a file.
+	 *
+	 * @param obj		the object
+	 * @param filepath	the file path
+	 * @throws IOException	IOException
+	 */
+    public static void save2File(Object obj, String filepath) throws IOException {
     	File file = new File(filepath);
     	file.getParentFile().mkdirs();
     	objMapper.writeValue(file, obj);
     }
-    
-    public static <T> T parseFromFile(String filepath, Class<T> valueType) throws JsonParseException, JsonMappingException, IOException {
+
+	/**
+	 * Parse a file which contains Json string.
+	 *
+	 * @param filepath	the file path
+	 * @param valueType	the value type
+	 * @param <T>		the type
+	 * @return			an instance typed T
+	 * @throws IOException	IOException
+	 */
+    public static <T> T parseFromFile(String filepath, Class<T> valueType) throws IOException {
     	return objMapper.readValue(filepath, valueType);
     }
 }
