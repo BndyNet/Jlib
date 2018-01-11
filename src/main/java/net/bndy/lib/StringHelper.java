@@ -213,4 +213,53 @@ public class StringHelper {
     public static <T> T toJson(String content, Class<T> valueType) throws IOException {
         return JsonHelper.parse(content, valueType);
     }
+
+    /**
+     * Inserts content before the specified position.
+     *  If the index position exceeds the source length, then append to source.
+     *
+     * @param source    the source string
+     * @param index     the position in source
+     * @param content   the insertion content
+     * @return  the inserted string
+     */
+    public static String insertBefore(String source, int index, String content) {
+        if (source == null)
+            source = "";
+
+        if (index <= 0) {
+            return content + source;
+        }
+
+        if (index >= source.length()) {
+            return source + content;
+        }
+
+        return source.substring(0, index) + content + source.substring(index);
+    }
+
+    /**
+     *
+     * Inserts content after the specified position.
+     *  If the index is less than 0, then preappend to source.
+     *
+     * @param source    the source string
+     * @param index     the position in source
+     * @param content   the insertion content
+     * @return  the inserted string
+     */
+    public static String insertAfter(String source, int index, String content) {
+        if (source == null)
+            source = "";
+
+        if (index < 0) {
+            return content + source;
+        }
+
+        if (index + 1 >= source.length()) {
+            return source + content;
+        }
+
+        return source.substring(0, index + 1) + content + source.substring(index + 1);
+    }
 }
