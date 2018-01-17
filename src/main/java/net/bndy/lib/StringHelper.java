@@ -262,4 +262,43 @@ public class StringHelper {
 
         return source.substring(0, index + 1) + content + source.substring(index + 1);
     }
+
+    /**
+     * Splits string with specific separator.
+     *  1-2-3   ->  1, 1-2, 1-2-3
+     *
+     * @param source    the source string
+     * @param separator the separator
+     * @return  the string list
+     */
+    public static List<String> stairSplit(String source, String separator) {
+        List<String> result = new ArrayList();
+        String path = null;
+        for (String item: source.split(separator)) {
+            if (path == null) {
+                path = item;
+            } else {
+                path += separator + item;
+            }
+            result.add(path);
+        }
+        return result;
+    }
+
+    /**
+     * Splits source without whitespace and parse to Long.
+     *
+     * @param source     the source string
+     * @param separator  the separator
+     * @return  the Long list
+     */
+    public static List<Long> splitToLong(String source, String separator) {
+        List<Long> result = new ArrayList<>();
+        String[] tmp = splitWithoutWhitespace(source, separator);
+        for (String s : tmp) {
+            result.add(Long.parseLong(s));
+        }
+
+        return result;
+    }
 }
