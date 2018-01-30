@@ -264,6 +264,26 @@ public class StringHelper {
     }
 
     /**
+     * Inserts underscore between words.
+     *
+     * @param text  the text
+     * @return  the inserted string
+     */
+    public static String insertUnderscoreBetweenWords(String text) {
+        StringBuilder buf = new StringBuilder(text.replace('.', '_'));
+        for (int i = 1; i < buf.length() - 1; i++) {
+            if (
+                Character.isLowerCase(buf.charAt(i - 1)) &&
+                    Character.isUpperCase(buf.charAt(i)) &&
+                    Character.isLowerCase(buf.charAt(i + 1))
+                ) {
+                buf.insert(i++, '_');
+            }
+        }
+        return buf.toString();
+    }
+
+    /**
      * Splits string with specific separator.
      *  1-2-3   // output:  1, 1-2, 1-2-3
      *

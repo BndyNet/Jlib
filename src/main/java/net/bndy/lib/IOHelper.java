@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -19,6 +20,12 @@ import javax.imageio.ImageIO;
  * IO Utils
  */
 public class IOHelper {
+
+	public static final String[] EXTENSION_NAMES_FOR_IMAGE = { ".bmp", ".gif", ".img", ".jpe", ".jpg", ".jpeg", ".pbm",
+		".png", ".tga", ".tiff" };
+	public static final String[] EXTENSION_NAMES_FOR_VIDEO = { ".avi", ".flv", ".wmv", ".mov", ".mp4" };
+	public static final String[] EXTENSION_NAMES_FOR_AUDIO = { ".mp3", ".mav", ".aiff", ".wma" };
+
 
 	/**
 	 * Creates thumbnail.
@@ -242,5 +249,24 @@ public class IOHelper {
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * Gets the file type by name.
+	 *
+	 * @param name	the file name
+	 * @return		FileType
+	 */
+	public static FileType getTypeByName(String name) {
+		String extensionName = name.toLowerCase().substring(name.indexOf("."));
+		if (Arrays.asList(EXTENSION_NAMES_FOR_IMAGE).indexOf(extensionName) >= 0) {
+			return FileType.IMAGE;
+		} else if (Arrays.asList(EXTENSION_NAMES_FOR_VIDEO).indexOf(extensionName) >= 0) {
+			return FileType.VIDEO;
+		} else if (Arrays.asList(EXTENSION_NAMES_FOR_AUDIO).indexOf(extensionName) >= 0) {
+			return FileType.AUDIO;
+		}
+
+		return FileType.UNKNOWN;
 	}
 }
