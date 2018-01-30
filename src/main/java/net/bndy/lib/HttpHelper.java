@@ -105,7 +105,7 @@ public class HttpHelper {
 	 * Sends a Post request.
 	 *
 	 * @param url	the request url
-	 * @param parameterMap	the post data typed Map<?, ?>
+	 * @param parameterMap	the post data typed {@literal (Map<?, ?>)}
 	 * @return	the response
 	 * @throws Exception	any exceptions
 	 */

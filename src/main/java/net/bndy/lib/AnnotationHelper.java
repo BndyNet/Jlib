@@ -34,7 +34,7 @@ public class AnnotationHelper {
      * @param <T>       the annotation type
      * @param <TSource> the source type
      * @return          the instance typed {@code T}
-     * @throws NoSuchFieldException if the field does not exist, or not public
+     * @throws SecurityException SecurityException
      */
     public static <T extends Annotation, TSource> T getClassAnnotation(Class<T> annotationClass, Class<TSource> source) throws SecurityException {
         return source.getAnnotation(annotationClass);

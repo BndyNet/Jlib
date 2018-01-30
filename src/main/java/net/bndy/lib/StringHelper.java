@@ -265,7 +265,7 @@ public class StringHelper {
 
     /**
      * Splits string with specific separator.
-     *  1-2-3   ->  1, 1-2, 1-2-3
+     *  1-2-3   // output:  1, 1-2, 1-2-3
      *
      * @param source    the source string
      * @param separator the separator
