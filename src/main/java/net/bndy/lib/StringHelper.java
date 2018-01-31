@@ -321,4 +321,17 @@ public class StringHelper {
 
         return result;
     }
+
+    /**
+     * Checks whether a string is {@code null}, empty or whitespace.
+     *
+     * @param source  the source string
+     * @return  {@code true} if null, empty or whitespace, otherwise {@code false}
+     */
+    public static boolean IsNullOrWhiteSpace(String source) {
+        if (source == null || source.trim().equals("")) {
+            return true;
+        }
+        return false;
+    }
 }
