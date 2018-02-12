@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.commons.codec.binary.Base64;
 
 
@@ -328,10 +329,21 @@ public class StringHelper {
      * @param source  the source string
      * @return  {@code true} if null, empty or whitespace, otherwise {@code false}
      */
-    public static boolean IsNullOrWhiteSpace(String source) {
+    public static boolean isNullOrWhiteSpace(String source) {
         if (source == null || source.trim().equals("")) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Replaces `\W+` to `-` and convent to lower case.
+     *
+     * @param   text
+     *          the string
+     * @return  the replaced string
+     */
+    public static String title2Url(String text) {
+        return text.replaceAll("\\W+", "-").toLowerCase();
     }
 }

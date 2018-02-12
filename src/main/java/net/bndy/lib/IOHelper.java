@@ -10,9 +10,12 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
 
@@ -268,5 +271,20 @@ public class IOHelper {
 		}
 
 		return FileType.UNKNOWN;
+	}
+
+	/**
+	 * Reads text file.
+	 *
+	 * @param 	filePath
+	 * 			the file full name
+	 *
+	 * @return	the file content
+	 *
+	 * @throws	IOException
+	 * 			if an I/O error occurs opening the file
+	 */
+	public static String readTextFile(String filePath) throws IOException {
+		return Files.lines(Paths.get(filePath)).collect(Collectors.joining("\n"));
 	}
 }

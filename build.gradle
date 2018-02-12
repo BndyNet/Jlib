@@ -1,5 +1,5 @@
 group 'net.bndy'
-version '1.0.1'
+version '1.0.2'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -20,6 +20,11 @@ dependencies {
     compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.0'
     compile group: 'org.apache.directory.studio', name: 'org.apache.commons.io', version: '2.4'
     compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+}
+
+task copyDocs(type: Copy) {
+    from 'build/docs'
+    into 'docs'
 }
 
 task javadocJar(type: Jar) {
