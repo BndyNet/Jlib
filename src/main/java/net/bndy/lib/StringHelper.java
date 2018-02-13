@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.commons.codec.binary.Base64;
 
 
@@ -166,7 +165,7 @@ public class StringHelper {
      * @return  an array typed String
      */
     public static String[] splitWithoutWhitespace(String source, String separator) {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         String[] items = source.split(separator);
         for (String s : items) {
             if (!"".equals(s.trim())) {
@@ -293,7 +292,7 @@ public class StringHelper {
      * @return  the string list
      */
     public static List<String> stairSplit(String source, String separator) {
-        List<String> result = new ArrayList();
+        List<String> result = new ArrayList<>();
         String path = null;
         for (String item: source.split(separator)) {
             if (path == null) {
@@ -345,5 +344,33 @@ public class StringHelper {
      */
     public static String title2Url(String text) {
         return text.replaceAll("\\W+", "-").toLowerCase();
+    }
+
+    /**
+     * Checks whether two strings are same.
+     * @param   a
+     *          The string a
+     * @param   b
+     *          The string b
+     * @return  <code>true</code> if both of them are <code>null</code> or same strings.
+     */
+    public static boolean equals(String a, String b) {
+        return  (a == null && b == null) || (a != null && a.equals(b));
+    }
+
+    /**
+     * Compares two strings ignore case.
+     * @param   a
+     *          The string a
+     * @param   b
+     *          The string b
+     * @return  <code>true</code> if both of them are <code>null</code> or same strings when cases to lower.
+     */
+    public static boolean equalsIgnoreCase(String a, String b) {
+        if (a == null && b == null) {
+            return true;
+        }
+
+        return equals(a.toLowerCase(), b.toLowerCase());
     }
 }

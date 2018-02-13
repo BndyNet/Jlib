@@ -1,5 +1,5 @@
 group 'net.bndy'
-version '1.0.2'
+version '1.0.3'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -65,6 +65,11 @@ uploadArchives {
                 // optionally artifactId can be defined here
                 description 'A Java Library'
                 url 'https://github.com/bndynet/Jlib'
+
+                organization {
+                    name 'BNDY-NET'
+                    url 'http://bndy.net'
+                }
 
                 scm {
                     url 'https://github.com/bndynet/Jlib'
