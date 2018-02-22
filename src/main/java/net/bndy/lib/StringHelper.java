@@ -373,4 +373,28 @@ public class StringHelper {
 
         return equals(a.toLowerCase(), b.toLowerCase());
     }
+
+    /**
+     * Checks whether or not the string is a number.
+     * @param s The string s
+     * @return  <code>true</code> if number, otherwise false
+     */
+    public static boolean isNumeric(String s) {
+        if (s != null && !"".equals(s.trim()))
+            return s.matches("^[0-9]*$");
+        else
+            return false;
+    }
+
+    /**
+     * Checks whether or not the string is an email address.
+     * @param s the string s
+     * @return <code>true</code> if email address, otherwise false.
+     */
+    public static boolean isEmail(String s) {
+        if (s != null && !"".equals(s.trim()))
+            return s.matches("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\\\.[A-Za-z]{2,4}");
+        else
+            return false;
+    }
 }
