@@ -22,15 +22,16 @@ dependencies {
     compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
 }
 
-task copyDocs(type: Copy) {
-    from 'build/docs'
-    into 'docs'
-}
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc
 }
+task copyDocs(type: Copy, dependsOn: javadocJar) {
+    from 'build/docs'
+    into 'docs'
+}
+javadocJar.finalizedBy(copyDocs)
 
 task sourcesJar(type: Jar) {
     classifier = 'sources'
