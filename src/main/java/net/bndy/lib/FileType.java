@@ -1,7 +1,7 @@
 package net.bndy.lib;
 
 public enum FileType {
-    UNKNOWN,
+    OTHER,
     TEXT,
     IMAGE,
     AUDIO,

@@ -25,6 +25,7 @@ import javax.imageio.ImageIO;
  */
 public class IOHelper {
 
+    public static final String[] EXTENSION_NAMES_FOR_TEXT = {".txt", ".json", ".html", "htm", ".xml", ".js", ".java", ".cs", ".properties"};
     public static final String[] EXTENSION_NAMES_FOR_IMAGE = {".bmp", ".gif", ".img", ".jpe", ".jpg", ".jpeg", ".pbm",
         ".png", ".tga", ".tiff"};
     public static final String[] EXTENSION_NAMES_FOR_VIDEO = {".avi", ".flv", ".wmv", ".mov", ".mp4"};
@@ -266,13 +267,15 @@ public class IOHelper {
         String extensionName = name.toLowerCase().substring(name.indexOf("."));
         if (Arrays.asList(EXTENSION_NAMES_FOR_IMAGE).indexOf(extensionName) >= 0) {
             return FileType.IMAGE;
+        } else if (Arrays.asList(EXTENSION_NAMES_FOR_TEXT).indexOf(extensionName) >= 0) {
+            return FileType.TEXT;
         } else if (Arrays.asList(EXTENSION_NAMES_FOR_VIDEO).indexOf(extensionName) >= 0) {
             return FileType.VIDEO;
         } else if (Arrays.asList(EXTENSION_NAMES_FOR_AUDIO).indexOf(extensionName) >= 0) {
             return FileType.AUDIO;
         }
 
-        return FileType.UNKNOWN;
+        return FileType.OTHER;
     }
 
     /**
@@ -290,16 +293,13 @@ public class IOHelper {
      * Deletes a file or directory even if the directory has files.
      *
      * @param path The file path or directory path.
-     * @return <code>true</code> if and only if the file or directory which existed is
-     * successfully deleted; <code>false</code> otherwise or the target does not exist or the target does not exist.
-     * @throws IOException If I/O error
      */
-    public static boolean forceDelete(String path) throws IOException {
-        if (isDirectoryExisted(path)) {
+    public static void forceDelete(String path) {
+        try {
             FileUtils.forceDelete(new File(path));
-            return true;
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
-        return false;
     }
 
     /**
