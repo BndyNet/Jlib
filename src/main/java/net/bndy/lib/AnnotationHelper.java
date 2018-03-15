@@ -20,10 +20,9 @@ public class AnnotationHelper {
      * @param <T>       the annotation type
      * @param <TSource> the source type
      * @return          the instance typed {@code T}
-     * @throws NoSuchFieldException if the field does not exist, or not public
      */
-    public static <T extends Annotation, TSource> T getFieldAnnotation(Class<T> annotationClass, Class<TSource> source, String fieldName) throws NoSuchFieldException {
-        return source.getField(fieldName).getAnnotation(annotationClass);
+    public static <T extends Annotation, TSource> T getFieldAnnotation(Class<T> annotationClass, Class<TSource> source, String fieldName) {
+        return ReflectionHelper.getField(fieldName, source).getAnnotation(annotationClass);
     }
 
     /**

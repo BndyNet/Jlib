@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Reflection Helper Class
@@ -20,9 +22,21 @@ public class ReflectionHelper {
     private static final String TYPE_INTERFACE_NAME_PREFIX = "interface ";
 
     /**
-     *  Utility class with static access methods, no need for constructor.
+     * Utility class with static access methods, no need for constructor.
      */
-    private ReflectionHelper() {}
+    private ReflectionHelper() {
+    }
+
+    /**
+     * Gets class of T generic type.
+     *
+     * @param <T> the generic type
+     * @return the class
+     */
+    public static <T> Class<T> getClazz() {
+        GenericType<T> gt = new GenericType<>();
+        return gt.getClazz();
+    }
 
     /**
      * {@link Object#toString()} value is the fully qualified class name prefixed
@@ -31,11 +45,10 @@ public class ReflectionHelper {
      *
      * @param type the {@code Type} value whose class name is needed.
      * @return {@code String} class name of the invoked {@code type}.
-     *
      * @see #getClass()
      */
     public static String getClassName(Type type) {
-        if (type==null) {
+        if (type == null) {
             return "";
         }
         String className = type.toString();
@@ -53,9 +66,7 @@ public class ReflectionHelper {
      *
      * @param type the {@code Type} whose {@code Class} is needed.
      * @return the {@code Class} object for the class with the specified name.
-     *
      * @throws ClassNotFoundException if the class cannot be located.
-     *
      * @see #getClassName(Type)
      */
     public static Class<?> getClass(Type type)
@@ -71,18 +82,16 @@ public class ReflectionHelper {
      * Creates a new instance of the class represented by this {@code Type} object.
      *
      * @param type the {@code Type} object whose its representing {@code Class} object
-     * 		will be instantiated.
+     *             will be instantiated.
      * @return a newly allocated instance of the class represented by
-     * 		the invoked {@code Type} object.
-     *
+     * the invoked {@code Type} object.
      * @throws ClassNotFoundException if the class represented by this {@code Type} object
-     * 			cannot be located.
+     *                                cannot be located.
      * @throws InstantiationException if this {@code Type} represents an abstract class,
-     *             an interface, an array class, a primitive type, or void;
-     *             or if the class has no nullary constructor;
-     *             or if the instantiation fails for some other reason.
+     *                                an interface, an array class, a primitive type, or void;
+     *                                or if the class has no nullary constructor;
+     *                                or if the instantiation fails for some other reason.
      * @throws IllegalAccessException if the class or its nullary constructor is not accessible.
-     *
      * @see Class#newInstance()
      */
     public static Object newInstance(Type type)
@@ -102,8 +111,7 @@ public class ReflectionHelper {
      *
      * @param object the {@code object} whose type arguments are needed.
      * @return an array of {@code Type} objects representing the actual type
-     * 		arguments to this object.
-     *
+     * arguments to this object.
      * @see Class#getGenericSuperclass()
      */
     public static Type[] getParameterizedTypes(Object object) {
@@ -112,7 +120,7 @@ public class ReflectionHelper {
             return null;
         }
 
-        return ((ParameterizedType)superclassType).getActualTypeArguments();
+        return ((ParameterizedType) superclassType).getActualTypeArguments();
     }
 
     /**
@@ -122,20 +130,19 @@ public class ReflectionHelper {
      * @param clazz the {@code Class} object whose constructors are checked.
      * @return {@code true} if a {@code Constructor} object with no parameter types is specified.
      * @throws SecurityException If a security manager, <i>s</i> is present and any of the
-     *         following conditions is met:
-     *			<ul>
-     *             <li> invocation of
-     *             {@link SecurityManager#checkMemberAccess
-     *             s.checkMemberAccess(this, Member.PUBLIC)} denies
-     *             access to the constructor
-     *
-     *             <li> the caller's class loader is not the same as or an
-     *             ancestor of the class loader for the current class and
-     *             invocation of {@link SecurityManager#checkPackageAccess
-     *             s.checkPackageAccess()} denies access to the package
-     *             of this class
-     *         </ul>
-     *
+     *                           following conditions is met:
+     *                           <ul>
+     *                           <li> invocation of
+     *                           {@link SecurityManager#checkMemberAccess
+     *                           s.checkMemberAccess(this, Member.PUBLIC)} denies
+     *                           access to the constructor
+     *                           <p>
+     *                           <li> the caller's class loader is not the same as or an
+     *                           ancestor of the class loader for the current class and
+     *                           invocation of {@link SecurityManager#checkPackageAccess
+     *                           s.checkPackageAccess()} denies access to the package
+     *                           of this class
+     *                           </ul>
      * @see Class#getConstructor(Class...)
      */
     public static boolean hasDefaultConstructor(Class<?> clazz) throws SecurityException {
@@ -154,16 +161,15 @@ public class ReflectionHelper {
      * the invoked {@code Class<?> clazz} parameter.
      *
      * @param clazz the {@code Class} object whose declared fields to be
-     * 		checked for a certain field.
-     * @param name the field name as {@code String} to be
-     * 		compared with {@link Field#getName()}
+     *              checked for a certain field.
+     * @param name  the field name as {@code String} to be
+     *              compared with {@link Field#getName()}
      * @return the {@code Class} object representing the type of given field name.
-     *
      * @see Class#getDeclaredFields()
      * @see Field#getType()
      */
     public static Class<?> getFieldClass(Class<?> clazz, String name) {
-        if (clazz==null || name==null || name.isEmpty()) {
+        if (clazz == null || name == null || name.isEmpty()) {
             return null;
         }
 
@@ -186,16 +192,15 @@ public class ReflectionHelper {
      * {@code String name} parameter inside the invoked {@code Class<?> clazz} parameter.
      *
      * @param clazz the {@code Class} object whose declared methods to be
-     * 		checked for the wanted method name.
-     * @param name the method name as {@code String} to be
-     * 		compared with {@link Method#getName()}
+     *              checked for the wanted method name.
+     * @param name  the method name as {@code String} to be
+     *              compared with {@link Method#getName()}
      * @return the {@code Class} object representing the return type of the given method name.
-     *
      * @see Class#getDeclaredMethods()
      * @see Method#getReturnType()
      */
     public static Class<?> getMethodReturnType(Class<?> clazz, String name) {
-        if (clazz==null || name==null || name.isEmpty()) {
+        if (clazz == null || name == null || name.isEmpty()) {
             return null;
         }
 
@@ -218,23 +223,108 @@ public class ReflectionHelper {
      * to declare an enum constant in the given class.
      *
      * @param clazz the {@code Class} object of the enum type from which
-     * 		to return a constant.
-     * @param name the name of the constant to return.
+     *              to return a constant.
+     * @param name  the name of the constant to return.
      * @return the enum constant of the specified enum type with the
-     *      specified name.
-     *
+     * specified name.
      * @throws IllegalArgumentException if the specified enum type has
-     *         no constant with the specified name, or the specified
-     *         class object does not represent an enum type.
-     *
+     *                                  no constant with the specified name, or the specified
+     *                                  class object does not represent an enum type.
      * @see Enum#valueOf(Class, String)
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Object getEnumConstant(Class<?> clazz, String name) {
-        if (clazz==null || name==null || name.isEmpty()) {
+        if (clazz == null || name == null || name.isEmpty()) {
             return null;
         }
-        return Enum.valueOf((Class<Enum>)clazz, name);
+        return Enum.valueOf((Class<Enum>) clazz, name);
     }
 
+    /**
+     * Gets all fields of type clazz.
+     *
+     * @param clazz the {@code Class} object.
+     * @return the list typed Field
+     */
+    public static List<Field> getAllFields(Class<?> clazz) {
+        List<Field> result = new ArrayList<>();
+        Field[] publicFields = clazz.getFields();
+
+        for (Field field : publicFields) {
+            if (!result.contains(field)) {
+                result.add(field);
+            }
+        }
+
+        Field[] declaredFields = clazz.getDeclaredFields();
+        for (Field field : declaredFields) {
+            if (!result.contains(field)) {
+                result.add(field);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets the field by field name.
+     *
+     * @param name  the field name
+     * @param clazz the class
+     * @return the field typed {@code Field}
+     */
+    public static Field getField(String name, Class<?> clazz) {
+        return CollectionHelper.first(getAllFields(clazz), field -> field.getName().equals(name));
+    }
+
+    /**
+     * Sets field value.
+     *
+     * @param data       the data
+     * @param fieldName  the field name
+     * @param fieldValue the field value
+     * @throws IllegalAccessException if illegal access
+     */
+    public static void setFieldValue(Object data, String fieldName, Object fieldValue) throws IllegalAccessException {
+        Field field = getField(fieldName, data.getClass());
+        if (field != null) {
+            field.setAccessible(true);
+            field.set(data, fieldValue);
+        }
+    }
+
+    /**
+     * Gets all methods of type clazz.
+     *
+     * @param clazz the {@code Class} object.
+     * @return the list typed Method
+     */
+    public static List<Method> getAllMethods(Class<?> clazz) {
+        List<Method> result = new ArrayList<>();
+        Method[] publicMethods = clazz.getMethods();
+
+        for (Method method : publicMethods) {
+            if (!result.contains(method)) {
+                result.add(method);
+            }
+        }
+
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method method : declaredMethods) {
+            if (!result.contains(method)) {
+                result.add(method);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Gets the method by method name.
+     *
+     * @param name  the method name
+     * @param clazz the class
+     * @return the field typed {@code Method}
+     */
+    public static Method getMethod(String name, Class<?> clazz) {
+        return CollectionHelper.first(getAllMethods(clazz), method -> method.getName().equals(name));
+    }
 }
