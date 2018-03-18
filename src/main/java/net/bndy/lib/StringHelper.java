@@ -397,4 +397,13 @@ public class StringHelper {
         else
             return false;
     }
+
+    /**
+     * Strips all html code.
+     * @param s the string s
+     * @return the text without html code
+     */
+    public static String stripHtml(String s) {
+        return s.replaceAll("<.*?>", "");
+    }
 }
