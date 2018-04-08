@@ -288,7 +288,11 @@ public class ReflectionHelper {
         Field field = getField(fieldName, data.getClass());
         if (field != null) {
             field.setAccessible(true);
-            field.set(data, fieldValue);
+            if (field.getType().getSuperclass() == Enum.class && fieldValue.getClass() == String.class) {
+                field.set(data, Enum.valueOf((Class<Enum>) field.getType(), fieldValue.toString()));
+            } else {
+                field.set(data, fieldValue);
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 group 'net.bndy'
-version '1.0.8'
+version '1.0.9'
 
 apply plugin: 'java'
 apply plugin: 'maven'
@@ -62,8 +62,6 @@ uploadArchives {
             pom.project {
                 name 'Jlib'
                 packaging 'jar'
-
-                // optionally artifactId can be defined here
                 description 'A Java Library'
                 url 'https://github.com/bndynet/Jlib'
 
