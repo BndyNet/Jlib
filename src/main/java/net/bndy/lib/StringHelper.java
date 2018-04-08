@@ -406,4 +406,21 @@ public class StringHelper {
     public static String stripHtml(String s) {
         return s.replaceAll("<.*?>", "");
     }
+
+    /**
+     * Converts to enum type by name ignored case.
+     * @param name  the enum name
+     * @param enumClazz  the enum type class
+     * @param <T> the enum type
+     * @return  the instance of enum type. null if the name is not defined in enum.
+     */
+    public static <T extends Enum<T>> T toEnum(String name, Class<T> enumClazz) {
+        Set<T> values = EnumSet.allOf(enumClazz);
+        for(T t: values) {
+            if (t.name().equalsIgnoreCase(name)) {
+                return t;
+            }
+        }
+        return null;
+    }
 }
