@@ -17,8 +17,6 @@ public class AnnotationHelperTest {
 
     @Test
     public void getAnnotation() {
-        TestClazz tc = new TestClazz();
-
         TestAnnotation ta = AnnotationHelper.getClassAnnotation(TestAnnotation.class, TestClazz.class);
         Assert.assertEquals(ta.name(), "ClassAnnotationName");
 

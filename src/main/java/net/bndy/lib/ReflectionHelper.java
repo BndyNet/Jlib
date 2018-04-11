@@ -284,7 +284,8 @@ public class ReflectionHelper {
      * @param fieldValue the field value
      * @throws IllegalAccessException if illegal access
      */
-    public static void setFieldValue(Object data, String fieldName, Object fieldValue) throws IllegalAccessException {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void setFieldValue(Object data, String fieldName, Object fieldValue) throws IllegalAccessException {
         Field field = getField(fieldName, data.getClass());
         if (field != null) {
             field.setAccessible(true);

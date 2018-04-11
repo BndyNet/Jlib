@@ -2,11 +2,11 @@ package net.bndy.lib.cache;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
+import java.util.Map.Entry;
 
 public class Cache {
 
-    private static HashMap cacheMap = new HashMap();
+    private static HashMap<String, CacheObject> cacheMap = new HashMap<String, CacheObject>();
 
     public synchronized static void put(String key, Object value) {
         CacheObject cache = new CacheObject(key, value, -1);
@@ -50,7 +50,8 @@ public class Cache {
         return null;
     }
 
-    public static <T> T get(String key) {
+    @SuppressWarnings("unchecked")
+	public static <T> T get(String key) {
         CacheObject cache = getCacheObject(key);
         if (cache != null) {
             return cache.getValue() == null ? null : (T) cache.getValue();
@@ -68,10 +69,10 @@ public class Cache {
 
     public synchronized static int clearKeyStartsWith(String keyPrefix) {
         int result = 0;
-        Iterator iterator = cacheMap.entrySet().iterator();
+        Iterator<Entry<String, CacheObject>> iterator = cacheMap.entrySet().iterator();
         String currentKey;
         while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+			Entry<?, ?> entry = (Entry<?, ?>) iterator.next();
             currentKey = (String) entry.getKey();
             if (currentKey.indexOf(keyPrefix) == 0) {
                 cacheMap.remove(currentKey);
@@ -83,10 +84,10 @@ public class Cache {
 
 
     public static int getSize() {
-        Iterator iterator = cacheMap.entrySet().iterator();
+        Iterator<Entry<String, CacheObject>> iterator = cacheMap.entrySet().iterator();
         String currentKey;
         while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+            Entry<?, ?> entry = iterator.next();
             currentKey = (String) entry.getKey();
             getCacheObject(currentKey);
         }
@@ -95,11 +96,11 @@ public class Cache {
 
     public static int getSizeKeyStartsWith(String keyPrefix) {
         int result = 0;
-        Iterator iterator = cacheMap.entrySet().iterator();
+        Iterator<Entry<String, CacheObject>> iterator = cacheMap.entrySet().iterator();
         String currentKey;
         CacheObject currentValue;
         while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
+            Entry<?, ?> entry = (Entry<?, ?>) iterator.next();
             currentKey = (String) entry.getKey();
             currentValue = getCacheObject(currentKey);
             if (currentValue != null) {
@@ -117,7 +118,7 @@ public class Cache {
     }
 
     private synchronized static CacheObject getCacheObject(String key) {
-        CacheObject cache = (CacheObject) cacheMap.get(key);
+        CacheObject cache = cacheMap.get(key);
         if (cache != null) {
             if (!cache.isExpired()) {
                 return cache;

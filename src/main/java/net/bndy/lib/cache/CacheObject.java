@@ -3,16 +3,17 @@ package net.bndy.lib.cache;
 import java.io.Serializable;
 
 public class CacheObject implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    private String key;
+	private String key;
     private Object value;
-    private long duration;
+    private long durationMillis;
     private long cachedMillis;
 
     public CacheObject(String key, Object value, long duration) {
         this.key = key;
         this.value = value;
-        this.duration = duration;
+        this.durationMillis = duration;
         this.cachedMillis = System.currentTimeMillis();
     }
 
@@ -40,15 +41,15 @@ public class CacheObject implements Serializable {
     }
 
     public long getDuration() {
-        return duration;
+        return durationMillis;
     }
 
     public void setDuration(long duration) {
-        this.duration = duration;
+        this.durationMillis = duration;
     }
 
     public boolean isExpired() {
-        if (duration > 0 && System.currentTimeMillis() > cachedMillis + duration) {
+        if (durationMillis > 0 && System.currentTimeMillis() > cachedMillis + durationMillis) {
             return true;
         }
         return false;

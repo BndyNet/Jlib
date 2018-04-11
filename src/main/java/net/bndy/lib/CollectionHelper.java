@@ -125,7 +125,8 @@ public class CollectionHelper {
      * @throws ClassNotFoundException if targetClass not found
      */
     public static <T> T convertMap2(Map<String, Object> mappings, Class<T> targetClass) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        T t = (T) ReflectionHelper.newInstance(targetClass);
+        @SuppressWarnings("unchecked")
+		T t = (T) ReflectionHelper.newInstance(targetClass);
         for(String key: mappings.keySet()) {
             ReflectionHelper.setFieldValue(t, key, mappings.get(key));
         }
@@ -147,10 +148,11 @@ public class CollectionHelper {
      * @param source the source
      * @param clazz the element class
      * @param <T> the element type
-     * @return an array typedd T
+     * @return an array typed T
      */
     public static <T> T[] list2Array(List<T> source, Class<T> clazz) {
-        T[] result = (T[]) Array.newInstance(clazz, source.size());
+        @SuppressWarnings("unchecked")
+		T[] result = (T[]) Array.newInstance(clazz, source.size());
         return source.toArray(result);
     }
 }

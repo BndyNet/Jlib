@@ -6,7 +6,8 @@ public class GenericType<T> {
 
     protected Class<T> clazz;
 
-    public GenericType() {
+    @SuppressWarnings("unchecked")
+	public GenericType() {
         this.clazz = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 

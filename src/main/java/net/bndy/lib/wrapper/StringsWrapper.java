@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 
 public class StringsWrapper implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    private List<String> values;
+	private List<String> values;
 
     public List<String> getValues() {
         return values;

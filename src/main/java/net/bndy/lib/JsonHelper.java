@@ -9,11 +9,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -37,10 +34,14 @@ public class JsonHelper {
 	 *
 	 * @param obj	the object
 	 * @return		the Json string
-	 * @throws JsonProcessingException	JsonProcessingException
 	 */
-    public static String toString(Object obj) throws JsonProcessingException {
-        return objMapper.writeValueAsString(obj);
+    public static String toString(Object obj) {
+        try {
+			return objMapper.writeValueAsString(obj);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+        return null;
     }
 
 	/**
@@ -50,10 +51,14 @@ public class JsonHelper {
 	 * @param valueType		the result type
 	 * @param <T>			the type
 	 * @return				an instance typed T
-	 * @throws IOException			IOException
 	 */
-    public static <T> T parse(String json, Class<T> valueType) throws IOException {
-    	return objMapper.readValue(json, valueType);
+    public static <T> T parse(String json, Class<T> valueType) {
+    	try {
+			return objMapper.readValue(json, valueType);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return null;
     }
 
 	/**
@@ -61,12 +66,15 @@ public class JsonHelper {
 	 *
 	 * @param obj		the object
 	 * @param filepath	the file path
-	 * @throws IOException	IOException
 	 */
-    public static void save2File(Object obj, String filepath) throws IOException {
+    public static void save2File(Object obj, String filepath) {
     	File file = new File(filepath);
     	file.getParentFile().mkdirs();
-    	objMapper.writeValue(file, obj);
+    	try {
+			objMapper.writeValue(file, obj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 
 	/**
@@ -76,9 +84,13 @@ public class JsonHelper {
 	 * @param valueType	the value type
 	 * @param <T>		the type
 	 * @return			an instance typed T
-	 * @throws IOException	IOException
 	 */
-    public static <T> T parseFromFile(String filepath, Class<T> valueType) throws IOException {
-    	return objMapper.readValue(filepath, valueType);
+    public static <T> T parseFromFile(String filepath, Class<T> valueType) {
+    	try {
+			return objMapper.readValue(filepath, valueType);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	return null;
     }
 }
