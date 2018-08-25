@@ -1,7 +1,12 @@
+/**
+ * Copyright (c) 2017 BNDY-NET. All Rights Reserved.
+ * http://bndy.net
+ */
 package net.bndy.lib;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -154,5 +159,19 @@ public class CollectionHelper {
         @SuppressWarnings("unchecked")
 		T[] result = (T[]) Array.newInstance(clazz, source.size());
         return source.toArray(result);
+    }
+    
+    /**
+     * Converts a Map to text with `&` separator.
+     * @param map the Map instance with key value pairs
+     * @return a string like `key1=value1&key2=value2`
+     */
+    public static String map2String(Map<Object, Object> map) {
+        List<String> list = new ArrayList<>();
+        for(Entry<Object ,Object> entry: map.entrySet()) {
+            list.add(entry.getKey().toString() + "=" + 
+                    entry.getValue() != null ? entry.getValue().toString() : "");
+        }
+        return String.join("&", list);
     }
 }

@@ -6,6 +6,8 @@
 package net.bndy.lib;
 
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -32,5 +34,19 @@ public class EnumHelper {
             }
         }
         return null;
+    }
+    
+    /**
+     * Converts an Enum type to Map instance stored key value pair.
+     * @param enumType the Enum type
+     * @return an HashMap instance with ordinal as key and name as value.
+     */
+    public static <T extends Enum<T>>  Map<Integer, String> toMap(Class<T> enumType) {
+        Map<Integer, String> result = new HashMap<Integer, String>();
+        Set<T> values = EnumSet.allOf(enumType);
+        for(T v: values) {
+            result.put(v.ordinal(), v.name());
+        }
+        return result;
     }
 }
