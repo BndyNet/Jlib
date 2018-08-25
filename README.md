@@ -1,5 +1,15 @@
-## Publish to Maven Central
+    
+    ,-----.   ,--.  ,--. ,------. ,--.   ,--.     ,--.  ,--. ,------. ,--------. 
+    |  |) /_  |  ,'.|  | |  .-.  \ \  `.'  /      |  ,'.|  | |  .---' '--.  .--' 
+    |  .-.  \ |  |' '  | |  |  \  : '.    /       |  |' '  | |  `--,     |  |    
+    |  '--' / |  | `   | |  '--'  /   |  |   .--. |  | `   | |  `---.    |  |    
+    `------'  `--'  `--' `-------'    `--'   '--' `--'  `--' `------'    `--'    
+    
+# Jlib - Java Library
 
-1. Run **uploadArchives** task for generating docs and push to repo.
-1. Log into **https://oss.sonatype.org/#stagingRepositories** and find repo.
-1. **Close** your repo and then **Release** it.
+## Modules
+
+- **lib-common**
+- **lib-data**
+- **lib-web**
+- **lib-mail**

@@ -10,7 +10,7 @@ buildscript {
 apply plugin: 'java'
 
 group 'net.bndy'
-version '2.0.0'
+version '2.0.1'
 
 dependencies {
     compile project('lib-common')
@@ -39,12 +39,27 @@ subprojects {
             licenses = ['Apache-2.0']
             vcsUrl = 'https://github.com/bndynet/Jlib.git'
             websiteUrl = 'http://bndy.net'
+            issueTrackerUrl = 'https://github.com/bndynet/Jlib/issues'
             publicDownloadNumbers = true
             version {
                 name = rootProject.version
                 desc = project.name
                 released = new Date()
                 vcsTag = rootProject.version
+                
+                githubRepo = 'bndynet/Jlib' 
+                githubReleaseNotesFile = 'README.md'
+                
+                gpg {
+                    sign = true
+                }
+                
+                mavenCentralSync {
+                    sync = true 
+                    user = System.getenv('OSS_USER')
+                    password = System.getenv('OSS_PASSWORD')
+                    close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                }      
             }
         }
     }
@@ -90,7 +105,7 @@ subprojects {
                 version rootProject.version
                 from components.java
                 
-                customizePom(pom)
+                customizePom(pom, project)
                 // create the sign pom artifact
                 pom.withXml {
                     def pomFile = file("${project.buildDir}/generated-pom.xml")
@@ -124,7 +139,7 @@ subprojects {
    
 }
 
-def customizePom(pom) {
+def customizePom(pom, project) {
     pom.withXml {
         def root = asNode()
         // eliminate test-scoped dependencies (no need in maven central POMs)
@@ -135,6 +150,7 @@ def customizePom(pom) {
         root.children().last() + {
             resolveStrategy = Closure.DELEGATE_FIRST
 
+            name project.name
             description project.name
             url 'https://github.com/bndynet/Jlib'
 

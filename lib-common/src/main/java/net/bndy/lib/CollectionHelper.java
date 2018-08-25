@@ -162,9 +162,9 @@ public class CollectionHelper {
     }
     
     /**
-     * Converts a Map to text with `&` separator.
+     * Converts a Map to text with `&amp;` separator.
      * @param map the Map instance with key value pairs
-     * @return a string like `key1=value1&key2=value2`
+     * @return a string like `key1=value1&amp;key2=value2`
      */
     public static String map2String(Map<Object, Object> map) {
         List<String> list = new ArrayList<>();
