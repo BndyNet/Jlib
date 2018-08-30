@@ -1,97 +1,186 @@
-group 'net.bndy'
-version '1.0.9'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+    }
+}
 
 apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'signing'
 
-
-sourceCompatibility = 1.8
-
-repositories {
-    mavenCentral()
-}
+group 'net.bndy'
+version '2.0.1'
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.3'
-    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.3'
-    compile group: 'commons-codec', name: 'commons-codec', version: '1.11'
-    compile group: 'javax.mail', name: 'javax.mail-api', version: '1.6.0'
-    compile group: 'org.apache.directory.studio', name: 'org.apache.commons.io', version: '2.4'
-    compile group: 'javax.servlet', name: 'servlet-api', version: '2.5'
+    compile project('lib-common')
+    compile project('lib-data')
+    compile project('lib-web')
+    compile project('lib-mail')
 }
 
 
-task javadocJar(type: Jar) {
-    classifier = 'javadoc'
-    from javadoc
-}
-task copyDocs(type: Copy, dependsOn: javadocJar) {
-    from 'build/docs'
-    into 'docs'
-}
-javadocJar.finalizedBy(copyDocs)
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.bintray'
 
-task sourcesJar(type: Jar) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
+    sourceCompatibility = 1.8 
+    
+    bintray {
+        user = System.getenv('BINTRAY_USER')
+        key = System.getenv('BINTRAY_API_KEY')
+        publications = ['maven']
+        pkg {
+            repo = 'Jlib'
+            name = project.name
+            userOrg = 'bndynet'
+            licenses = ['Apache-2.0']
+            vcsUrl = 'https://github.com/bndynet/Jlib.git'
+            websiteUrl = 'http://bndy.net'
+            issueTrackerUrl = 'https://github.com/bndynet/Jlib/issues'
+            publicDownloadNumbers = true
+            version {
+                name = rootProject.version
+                desc = project.name
+                released = new Date()
+                vcsTag = rootProject.version
+                
+                githubRepo = 'bndynet/Jlib' 
+                githubReleaseNotesFile = 'README.md'
+                
+                gpg {
+                    sign = true
+                }
+                
+                mavenCentralSync {
+                    sync = true 
+                    user = System.getenv('OSS_USER')
+                    password = System.getenv('OSS_PASSWORD')
+                    close = '1' //Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                }      
+            }
+        }
+    }
 
-artifacts {
-    archives javadocJar, sourcesJar
-}
-
-signing {
-    sign configurations.archives
-}
-
-uploadArchives {
     repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+        mavenCentral()
+    }
 
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
+    dependencies {
+        implementation 'com.google.guava:guava:21.0'
 
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
+        testImplementation 'junit:junit:4.12'
+    }
 
-            pom.project {
-                name 'Jlib'
-                packaging 'jar'
-                description 'A Java Library'
-                url 'https://github.com/bndynet/Jlib'
+    task javadocJar(type: Jar) {
+        classifier = 'javadoc'
+        from javadoc
+    }
+    task copyDocs(type: Copy, dependsOn: javadocJar) {
+        from 'build/docs'
+        into "${rootProject.projectDir}/docs/${project.name}" 
+    }
+    javadocJar.finalizedBy(copyDocs)
 
-                organization {
-                    name 'BNDY-NET'
-                    url 'http://bndy.net'
-                }
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
 
-                scm {
-                    url 'https://github.com/bndynet/Jlib'
-                    connection 'scm:git:git://github.com/bndynet/Jlib.git'
-                    developerConnection 'scm:git:git@github.com:bndynet/Jlib.git'
-                }
+    artifacts {
+        archives jar, javadocJar, sourcesJar
+    }
 
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    signing {
+        sign configurations.archives
+    }
+
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId rootProject.group
+                artifactId project.name
+                version rootProject.version
+                from components.java
+                
+                customizePom(pom, project)
+                // create the sign pom artifact
+                pom.withXml {
+                    def pomFile = file("${project.buildDir}/generated-pom.xml")
+                    writeTo(pomFile)
+                    def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+                    artifact(pomAscFile) {
+                        classifier = null
+                        extension = 'pom.asc'
                     }
                 }
 
-                developers {
-                    developer {
-                        id 'bndynet'
-                        name 'Bendy Zhang'
-                        email 'zb@bndy.net'
-                        url 'http://bndy.net'
+                artifact tasks.sourcesJar
+                artifact tasks.javadocJar
+                
+                // create the signed artifacts
+                project.tasks.signArchives.signatureFiles.each {
+                    artifact(it) {
+                        def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+                        if (matcher.find()) {
+                            classifier = matcher.group(1)
+                        } else {
+                            classifier = null
+                        }
+                        extension = 'jar.asc'
                     }
                 }
             }
         }
     }
+
+   
 }
+
+def customizePom(pom, project) {
+    pom.withXml {
+        def root = asNode()
+        // eliminate test-scoped dependencies (no need in maven central POMs)
+        root.dependencies.removeAll { dep ->
+            dep.scope == "test"
+        }
+        // add all items necessary for maven central publication
+        root.children().last() + {
+            resolveStrategy = Closure.DELEGATE_FIRST
+
+            name project.name
+            description project.name
+            url 'https://github.com/bndynet/Jlib'
+
+            organization {
+                name 'BNDY-NET'
+                url 'http://bndy.net'
+            }
+
+            scm {
+                url 'https://github.com/bndynet/Jlib'
+                connection 'scm:git:git://github.com/bndynet/Jlib.git'
+                developerConnection 'scm:git:git@github.com:bndynet/Jlib.git'
+            }
+
+            licenses {
+                license {
+                    name 'The Apache License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                }
+            }
+
+            developers {
+                developer {
+                    id 'bndynet'
+                    name 'Bendy Zhang'
+                    email 'zb@bndy.net'
+                    url 'http://bndy.net'
+                }
+            }
+        }
+    }
+}
+
